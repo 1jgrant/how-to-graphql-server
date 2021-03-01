@@ -31,6 +31,12 @@ const resolvers = {
       links.push(link);
       return link;
     },
+    updateLink: (parent, args) => {
+      const index = links.findIndex((element) => element.id === args.id);
+      const newLink = { ...args };
+      links.splice(index, 1, newLink);
+      return newLink;
+    },
   },
 };
 
