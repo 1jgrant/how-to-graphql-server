@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { APP_SECRET, getUserId } = require("../utils");
 
 async function signup(parent, args, context, info) {
-  const password = await bcrypt.hash(ags.password, 10);
+  const password = await bcrypt.hash(args.password, 10);
   const user = await context.prisma.user.create({
     data: { ...args, password },
   });
@@ -35,13 +35,16 @@ async function login(parent, args, context, info) {
 async function post(parent, args, context, info) {
   const { userId } = context;
 
-  return await context.prisma.link.create({
+  const newLink = await context.prisma.link.create({
     data: {
       url: args.url,
       description: args.description,
       postedBy: { connect: { id: userId } },
     },
   });
+  context.pubsub.publish("NEW_LINK", newLink);
+
+  return newLink;
 }
 
 module.exports = {
