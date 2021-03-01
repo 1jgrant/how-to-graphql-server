@@ -1,4 +1,6 @@
-const { buildSchemaFromTypeDefinitions } = require("apollo-server");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { APP_SECRET, getUserId } = require("../utils");
 
 async function signup(parent, args, context, info) {
   const password = await bcrypt.hash(ags.password, 10);
