@@ -37,6 +37,10 @@ const resolvers = {
       links.splice(index, 1, newLink);
       return newLink;
     },
+    deleteLink: (parent, args) => {
+      const index = links.findIndex((element) => element.id === args.id);
+      return links.splice(index, 1)[0];
+    },
   },
 };
 
