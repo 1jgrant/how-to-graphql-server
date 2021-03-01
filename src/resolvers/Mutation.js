@@ -33,7 +33,7 @@ async function login(parent, args, context, info) {
 }
 
 async function post(parent, args, context, info) {
-  const { userId } = context;
+  const userId = getUserId(context);
 
   const newLink = await context.prisma.link.create({
     data: {
@@ -48,7 +48,10 @@ async function post(parent, args, context, info) {
 }
 
 async function vote(parent, args, context, info) {
+  // 1
   const userId = getUserId(context);
+
+  // 2
   const vote = await context.prisma.vote.findUnique({
     where: {
       linkId_userId: {
@@ -57,9 +60,12 @@ async function vote(parent, args, context, info) {
       },
     },
   });
+
   if (Boolean(vote)) {
     throw new Error(`Already voted for link: ${args.linkId}`);
   }
+
+  // 3
   const newVote = context.prisma.vote.create({
     data: {
       user: { connect: { id: userId } },
@@ -67,6 +73,7 @@ async function vote(parent, args, context, info) {
     },
   });
   context.pubsub.publish("NEW_VOTE", newVote);
+
   return newVote;
 }
 
