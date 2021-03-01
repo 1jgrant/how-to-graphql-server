@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/1jgrant/how-to-graphql-server#readme",
   "dependencies": {
+    "@prisma/client": "^2.17.0",
     "apollo-server": "^2.21.0"
+  },
+  "devDependencies": {
+    "prisma": "^2.17.0"
   }
 }
